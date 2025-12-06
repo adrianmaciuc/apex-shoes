@@ -1,0 +1,20 @@
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist
+build
+.next
+out
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.local
+
+# IDE
+.vscode
+.idea
