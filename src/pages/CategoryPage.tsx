@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Filter, SlidersHorizontal, X } from 'lucide-react';
 import { shoes, categories } from '../data/shoes';
 import type { ShoeCategory } from '../types';
@@ -14,6 +14,11 @@ const CategoryPage = () => {
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 300]);
   const [showFilters, setShowFilters] = useState(false);
+
+  // Scroll to top on mount and when category changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [categoryName]);
 
   // Get category info
   const categoryInfo = categories.find((cat) => cat.id === categoryName);
