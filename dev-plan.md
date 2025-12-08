@@ -188,9 +188,152 @@ type ShoeCategory = "sneakers" | "running" | "casual" | "formal" | "boots";
 
 ---
 
-## Phase 6: Polish & Advanced Features
+## Phase 6: Unit Testing with Jest
 
-### 6.1 Interactions & Animations
+### 6.1 Jest Setup
+
+- [ ] Install Jest & related dependencies:
+  - `jest`
+  - `@testing-library/react`
+  - `@testing-library/jest-dom`
+  - `ts-jest` (TypeScript support)
+  - `jest-environment-jsdom`
+- [ ] Configure `jest.config.ts` with:
+  - TypeScript preset (`ts-jest`)
+  - Module paths (`moduleNameMapper` for aliases)
+  - Transform configuration
+  - Test environment (`jsdom`)
+- [ ] Create `jest.setup.ts` for global test configuration
+- [ ] Update `package.json` with test scripts:
+  - `test`: Run all tests
+  - `test:watch`: Watch mode
+  - `test:coverage`: Generate coverage reports
+
+### 6.2 Test Structure
+
+```
+src/
+├── __tests__/
+│   ├── components/
+│   │   ├── Navigation.test.tsx
+│   │   ├── ProductCard.test.tsx
+│   │   └── ...
+│   ├── pages/
+│   │   ├── HomePage.test.tsx
+│   │   ├── CartPage.test.tsx
+│   │   └── ...
+│   ├── context/
+│   │   └── CartContext.test.tsx
+│   ├── data/
+│   │   └── shoes.test.ts
+│   └── utils/
+│       └── ...
+```
+
+### 6.3 Component Tests
+
+**Navigation Component:**
+
+- [ ] Renders navigation bar with logo
+- [ ] Displays all navigation links correctly
+- [ ] Shows mobile menu toggle on smaller screens
+- [ ] Cart count updates when cart state changes
+- [ ] Navigation links route correctly
+
+**ProductCard Component:**
+
+- [ ] Renders product image, name, price correctly
+- [ ] Displays variant-specific content (default, compact, featured)
+- [ ] Shows add to cart button
+- [ ] Handles click events
+- [ ] Displays price formatting correctly
+
+**Home Page:**
+
+- [ ] Renders hero section
+- [ ] Displays featured products grid
+- [ ] Shows category cards
+- [ ] Renders new arrivals section
+- [ ] Newsletter form displays
+
+**Category Page:**
+
+- [ ] Filters products by category
+- [ ] Sorting functionality works (price, newest)
+- [ ] Filter sidebar updates results
+- [ ] Breadcrumb navigation displays correctly
+- [ ] Product count updates on filter change
+
+**Shoe Detail Page:**
+
+- [ ] Renders product information
+- [ ] Image gallery displays correctly
+- [ ] Size selector works
+- [ ] Color selector works (if applicable)
+- [ ] Quantity selector updates value
+- [ ] Add to cart adds correct item
+
+**Cart Page:**
+
+- [ ] Displays all cart items
+- [ ] Remove item functionality works
+- [ ] Quantity updates work
+- [ ] Order summary calculates correctly
+- [ ] Handles empty cart state
+
+### 6.4 Context & State Tests
+
+**CartContext:**
+
+- [ ] Adds items to cart
+- [ ] Removes items from cart
+- [ ] Updates item quantity
+- [ ] Clears entire cart
+- [ ] Calculates total price correctly
+- [ ] Handles duplicate items (increments quantity)
+- [ ] Persists to localStorage (if applicable)
+
+### 6.5 Utility & Data Tests
+
+**Shoes Data:**
+
+- [ ] Data structure is valid
+- [ ] All shoes have required fields
+- [ ] Categories match allowed types
+- [ ] No duplicate IDs
+- [ ] Prices are positive numbers
+
+**Utility Functions (as created):**
+
+- [ ] Price formatting works
+- [ ] Category filtering works
+- [ ] Sort functions work correctly
+- [ ] Size validation works
+
+### 6.6 Testing Best Practices
+
+- Use `@testing-library/react` for component testing
+- Avoid testing implementation details; test user behavior
+- Use descriptive test names (`describe` + `it`)
+- Mock external dependencies (e.g., API calls, routes)
+- Aim for >80% code coverage
+- Test edge cases (empty states, error states, etc.)
+- Use `fireEvent` or `userEvent` for user interactions
+- Group related tests with `describe` blocks
+
+### 6.7 Coverage Goals
+
+- [ ] Components: >85% coverage
+- [ ] Context/State: >90% coverage
+- [ ] Utils/Data: >95% coverage
+- [ ] Pages: >80% coverage
+- Overall target: >85% coverage
+
+---
+
+## Phase 7: Polish & Advanced Features
+
+### 7.1 Interactions & Animations
 
 - [~] Smooth page transitions - Framer Motion setup done, full page transitions pending
 - [x] Product card hover effects (lift, shadow)
@@ -198,13 +341,13 @@ type ShoeCategory = "sneakers" | "running" | "casual" | "formal" | "boots";
 - [ ] Skeleton loading states
 - [x] Toast notifications (add to cart confirmation)
 
-### 6.2 Performance
+### 7.2 Performance
 
 - [ ] Image optimization
 - [ ] Code splitting by route
 - [ ] Lazy load components below fold
 
-### 6.3 Responsive Design
+### 7.3 Responsive Design
 
 - [ ] Mobile-first approach
 - [ ] Touch-friendly interactions
