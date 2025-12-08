@@ -1,20 +1,52 @@
 import { Link } from "react-router-dom";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Tag } from "lucide-react";
 import { useCart } from "../context/CartContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CartPage = () => {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal, clearCart } =
     useCart();
+  const [voucher, setVoucher] = useState("");
+  const [appliedVoucher, setAppliedVoucher] = useState<string | null>(null);
+  const [voucherError, setVoucherError] = useState("");
+  const [country, setCountry] = useState("romania");
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Voucher definitions
+  const voucherCodes: { [key: string]: number } = {
+    "10OFF": 0.1, // 10% off
+    "20OFF": 0.2, // 20% off
+  };
+
+  const applyVoucher = () => {
+    const upperVoucher = voucher.toUpperCase().trim();
+    if (voucherCodes[upperVoucher]) {
+      setAppliedVoucher(upperVoucher);
+      setVoucherError("");
+      setVoucher("");
+    } else {
+      setVoucherError("Invalid voucher code");
+      setAppliedVoucher(null);
+    }
+  };
+
+  const removeVoucher = () => {
+    setAppliedVoucher(null);
+    setVoucher("");
+    setVoucherError("");
+  };
+
   const subtotal = getCartTotal();
-  const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = subtotal * 0.08; // 8% tax
-  const total = subtotal + shipping + tax;
+  const voucherDiscount = appliedVoucher
+    ? subtotal * voucherCodes[appliedVoucher]
+    : 0;
+  const subtotalAfterVoucher = subtotal - voucherDiscount;
+  const shipping = country === "romania" ? 0 : 20;
+  const tax = subtotalAfterVoucher * 0.08; // 8% tax
+  const total = subtotalAfterVoucher + shipping + tax;
 
   if (cartItems.length === 0) {
     return (
@@ -239,20 +271,119 @@ const CartPage = () => {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div
-              className="bg-white rounded-xl shadow-sm p-6 sticky top-20"
+              className="bg-white rounded-xl shadow-sm p-6 sticky top-20 space-y-6"
               data-testid="cart-order-summary"
             >
               <h2
-                className="text-2xl font-display font-bold mb-6"
+                className="text-2xl font-display font-bold"
                 data-testid="order-summary-heading"
               >
                 Order Summary
               </h2>
 
+              {/* Voucher Section */}
               <div
-                className="space-y-4 mb-6"
-                data-testid="order-summary-details"
+                className="bg-orange-50 border border-orange-200 rounded-lg p-4"
+                data-testid="voucher-section"
               >
+                <div className="flex items-center gap-2 mb-3">
+                  <Tag className="w-5 h-5 text-orange-600" />
+                  <h3 className="font-semibold text-orange-900">
+                    Apply Voucher
+                  </h3>
+                </div>
+
+                {appliedVoucher ? (
+                  <div
+                    className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-between"
+                    data-testid="applied-voucher-display"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-green-900">
+                        {appliedVoucher}
+                      </p>
+                      <p className="text-sm text-green-700">
+                        {voucherCodes[appliedVoucher] * 100}% discount applied
+                      </p>
+                    </div>
+                    <button
+                      onClick={removeVoucher}
+                      className="text-green-600 hover:text-green-700 font-medium text-sm"
+                      data-testid="remove-voucher-button"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    className="space-y-2"
+                    data-testid="voucher-input-section"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Enter code (e.g., 10OFF, 20OFF)"
+                      value={voucher}
+                      onChange={(e) => {
+                        setVoucher(e.target.value);
+                        setVoucherError("");
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") applyVoucher();
+                      }}
+                      className="w-full px-4 py-2 border border-orange-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      data-testid="voucher-input"
+                    />
+                    <button
+                      onClick={applyVoucher}
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded-lg transition-colors"
+                      data-testid="apply-voucher-button"
+                    >
+                      Apply Code
+                    </button>
+                    {voucherError && (
+                      <p
+                        className="text-sm text-red-600 font-medium"
+                        data-testid="voucher-error"
+                      >
+                        {voucherError}
+                      </p>
+                    )}
+                    <p className="text-xs text-orange-700 mt-2">
+                      <span className="font-semibold">Available codes:</span>{" "}
+                      10OFF (10%), 20OFF (20%)
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Shipping Calculator Section */}
+              <div
+                className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+                data-testid="shipping-calculator-section"
+              >
+                <h3 className="font-semibold text-blue-900 mb-3">
+                  Shipping Location
+                </h3>
+                <select
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+                  data-testid="country-selector"
+                >
+                  <option value="romania" data-testid="country-romania">
+                    Romania (FREE Shipping)
+                  </option>
+                  <option
+                    value="international"
+                    data-testid="country-international"
+                  >
+                    International ($20 Shipping)
+                  </option>
+                </select>
+              </div>
+
+              {/* Order Details */}
+              <div className="space-y-4" data-testid="order-summary-details">
                 <div
                   className="flex justify-between text-gray-600"
                   data-testid="order-subtotal"
@@ -265,6 +396,25 @@ const CartPage = () => {
                     ${subtotal.toFixed(2)}
                   </span>
                 </div>
+
+                {appliedVoucher && (
+                  <div
+                    className="flex justify-between text-green-600"
+                    data-testid="order-discount"
+                  >
+                    <span>
+                      {appliedVoucher} ({voucherCodes[appliedVoucher] * 100}%
+                      off)
+                    </span>
+                    <span
+                      className="font-semibold"
+                      data-testid="order-discount-amount"
+                    >
+                      -${voucherDiscount.toFixed(2)}
+                    </span>
+                  </div>
+                )}
+
                 <div
                   className="flex justify-between text-gray-600"
                   data-testid="order-shipping"
@@ -286,6 +436,7 @@ const CartPage = () => {
                     )}
                   </span>
                 </div>
+
                 <div
                   className="flex justify-between text-gray-600"
                   data-testid="order-tax"
@@ -298,21 +449,6 @@ const CartPage = () => {
                     ${tax.toFixed(2)}
                   </span>
                 </div>
-
-                {subtotal < 100 && subtotal > 0 && (
-                  <div
-                    className="bg-orange-50 border border-orange-200 rounded-lg p-3"
-                    data-testid="order-free-shipping-alert"
-                  >
-                    <p className="text-sm text-orange-700">
-                      Add{" "}
-                      <span className="font-semibold">
-                        ${(100 - subtotal).toFixed(2)}
-                      </span>{" "}
-                      more for free shipping!
-                    </p>
-                  </div>
-                )}
 
                 <div
                   className="border-t border-gray-200 pt-4"
@@ -332,7 +468,7 @@ const CartPage = () => {
               </div>
 
               <button
-                className="w-full btn-accent text-lg mb-4"
+                className="w-full btn-accent text-lg"
                 data-testid="cart-checkout-button"
               >
                 Proceed to Checkout
@@ -387,7 +523,7 @@ const CartPage = () => {
                 </div>
                 <div
                   className="flex items-start gap-3 text-sm text-gray-600"
-                  data-testid="trust-badge-free-shipping"
+                  data-testid="trust-badge-shipping"
                 >
                   <svg
                     className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
@@ -400,7 +536,7 @@ const CartPage = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span>Free shipping on orders over $100</span>
+                  <span>Free shipping to Romania</span>
                 </div>
               </div>
             </div>
