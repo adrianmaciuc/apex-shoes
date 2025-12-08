@@ -38,8 +38,8 @@ A modern, fully-functional e-commerce shoe shop built with React, TypeScript, an
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/sole-street.git
-cd sole-street
+git clone https://github.com/adrianmaciuc/demo-shop.git
+cd demo-shop
 ```
 
 2. **Install dependencies**
