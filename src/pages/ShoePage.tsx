@@ -14,6 +14,7 @@ import ProductCard from "../components/product/ProductCard";
 import Breadcrumb from "../components/layout/Breadcrumb";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
+import LazyImage from "../components/ui/LazyImage";
 
 const ShoePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -155,12 +156,13 @@ const ShoePage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden"
+              className="relative rounded-2xl overflow-hidden"
               data-testid="shoe-main-image-container"
             >
-              <img
+              <LazyImage
                 src={shoe.images[selectedImage]}
                 alt={shoe.name}
+                aspectRatio="square"
                 className="w-full h-full object-cover"
                 data-testid={`shoe-main-image-${selectedImage}`}
               />
@@ -184,16 +186,17 @@ const ShoePage = () => {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === index
                         ? "border-orange-500 ring-2 ring-orange-200"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                     data-testid={`shoe-thumbnail-${index}`}
                   >
-                    <img
+                    <LazyImage
                       src={image}
                       alt={`${shoe.name} ${index + 1}`}
+                      aspectRatio="square"
                       className="w-full h-full object-cover"
                       data-testid={`shoe-thumbnail-image-${index}`}
                     />

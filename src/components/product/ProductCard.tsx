@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import type { Shoe } from "../../types";
 import { motion } from "framer-motion";
+import LazyImage from "../ui/LazyImage";
 
 interface ProductCardProps {
   shoe: Shoe;
@@ -47,10 +48,11 @@ const ProductCard = ({
       className="card overflow-hidden"
       data-testid={`product-card-default-${shoe.id}`}
     >
-      <div className="relative overflow-hidden aspect-square">
-        <img
+      <div className="relative overflow-hidden">
+        <LazyImage
           src={shoe.images[0]}
           alt={shoe.name}
+          aspectRatio="square"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           data-testid={`product-image-${shoe.id}`}
         />
@@ -100,10 +102,11 @@ const ProductCard = ({
       className="card overflow-hidden"
       data-testid={`product-card-compact-${shoe.id}`}
     >
-      <div className="relative overflow-hidden aspect-square">
-        <img
+      <div className="relative overflow-hidden">
+        <LazyImage
           src={shoe.images[0]}
           alt={shoe.name}
+          aspectRatio="square"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           data-testid={`product-image-compact-${shoe.id}`}
         />
@@ -139,10 +142,11 @@ const ProductCard = ({
       className="card overflow-hidden"
       data-testid={`product-card-featured-${shoe.id}`}
     >
-      <div className="relative overflow-hidden aspect-[4/3]">
-        <img
+      <div className="relative overflow-hidden">
+        <LazyImage
           src={shoe.images[0]}
           alt={shoe.name}
+          aspectRatio="4/3"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           data-testid={`product-image-featured-${shoe.id}`}
         />

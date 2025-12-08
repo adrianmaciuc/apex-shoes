@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { shoes, categories } from "../data/shoes";
 import { motion } from "framer-motion";
 import ProductCard from "../components/product/ProductCard";
+import LazyImage from "../components/ui/LazyImage";
 
 const HomePage = () => {
   const featuredShoes = shoes.filter((shoe) => shoe.featured);
@@ -137,12 +138,13 @@ const HomePage = () => {
               >
                 <Link
                   to={`/category/${category.id}`}
-                  className="group block relative overflow-hidden rounded-2xl aspect-square"
+                  className="group block relative overflow-hidden rounded-2xl"
                   data-testid={`category-link-${category.id}`}
                 >
-                  <img
+                  <LazyImage
                     src={category.image}
                     alt={category.name}
+                    aspectRatio="square"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     data-testid={`category-image-${category.id}`}
                   />

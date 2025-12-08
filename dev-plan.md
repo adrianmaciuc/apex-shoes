@@ -367,8 +367,8 @@ src/
 
 - [~] Smooth page transitions - Framer Motion setup done, full page transitions pending
 - [x] Product card hover effects (lift, shadow)
-- [ ] Image lazy loading
-- [ ] Skeleton loading states
+- [x] Image lazy loading
+- [x] Skeleton loading states
 - [x] Toast notifications (add to cart confirmation)
 
 ### 7.2 Performance
@@ -461,14 +461,19 @@ src/
 
 - Project planning and structure defined
 - TypeScript types created (Shoe, Category, CartItem)
-- Mock data with 18 realistic shoes across all categories
+- Mock data with 267 shoes across all categories (50+ per category)
 - App.tsx with Router setup
 - Navigation component (responsive, with mobile menu, live cart count)
 - **Home Page built** (Hero, Featured, Categories, New Arrivals, Newsletter)
 - **ProductCard component** (3 variants: default, compact, featured)
 - **Category Page built** (Filtering, sorting, responsive sidebar)
 - **Individual Shoe Page built** (Image gallery, size/color selectors, accordion details)
-- **Shopping Cart System** (Context, add/remove, cart page, toast notifications)
+- **Shopping Cart System** (Context, add/remove, cart page, toast notifications, vouchers, shipping calculator)
+- **Performance Features**
+  - LazyImage component with IntersectionObserver
+  - Skeleton loading states for all images
+  - Shimmer animation for loading states
+  - ProductCardSkeleton component
 - **Jest Testing Framework Setup**
   - Configuration with ts-jest, jsdom, and test scripts
   - CartContext comprehensive unit tests (25 tests, 100% coverage)
@@ -482,9 +487,11 @@ The shop is now fully functional with:
 
 - Product browsing and filtering
 - Product detail views
-- Shopping cart with quantity management
+- Shopping cart with quantity management, vouchers, and shipping calculator
 - Order summary with shipping/tax calculation
 - Real-time cart updates in navigation
+- Image lazy loading with IntersectionObserver
+- Skeleton loading states across all components
 - Comprehensive unit tests for critical business logic
 
 ### 🔄 Next Testing Tasks

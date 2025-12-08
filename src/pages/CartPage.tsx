@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Tag } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useEffect, useState } from "react";
+import LazyImage from "../components/ui/LazyImage";
 
 const CartPage = () => {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal, clearCart } =
@@ -142,15 +143,18 @@ const CartPage = () => {
                 {/* Image */}
                 <Link
                   to={`/shoe/${item.shoe.id}`}
-                  className="flex-shrink-0 w-full sm:w-32 h-32 bg-gray-100 rounded-lg overflow-hidden"
+                  className="flex-shrink-0 w-full sm:w-32 rounded-lg overflow-hidden"
                   data-testid={`cart-item-image-link-${item.shoe.id}`}
                 >
-                  <img
-                    src={item.shoe.images[0]}
-                    alt={item.shoe.name}
-                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-                    data-testid={`cart-item-image-${item.shoe.id}`}
-                  />
+                  <div className="w-full h-32">
+                    <LazyImage
+                      src={item.shoe.images[0]}
+                      alt={item.shoe.name}
+                      aspectRatio="square"
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      data-testid={`cart-item-image-${item.shoe.id}`}
+                    />
+                  </div>
                 </Link>
 
                 {/* Details */}
