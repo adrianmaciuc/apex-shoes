@@ -329,6 +329,36 @@ src/
 - [ ] Pages: >80% coverage
 - Overall target: >85% coverage
 
+### 6.8 Future Component Testing Requirement
+
+**Important:** All future components and features MUST include unit tests as part of development:
+
+- [x] **Mandatory test coverage for all new components:**
+  - Every new React component must have a corresponding `.test.tsx` file
+  - Minimum test requirements:
+    - Component renders without errors
+    - Props are handled correctly
+    - User interactions work (clicks, inputs, etc.)
+    - Conditional rendering based on state/props
+    - Event handlers are called correctly
+
+- [x] **Mandatory test coverage for all new utilities:**
+  - Every new utility function must have corresponding tests in `.test.ts` file
+  - Test all code paths and edge cases
+  - Validate return values and side effects
+
+- [x] **Mandatory test coverage for new context/hooks:**
+  - Test provider setup and cleanup
+  - Test all context methods and state updates
+  - Test hook error handling
+
+- [x] **Testing workflow:**
+  1. Write component/function
+  2. Write tests immediately (TDD recommended)
+  3. Ensure tests pass before committing
+  4. Maintain >80% coverage per component
+  5. Review test quality in code reviews
+
 ---
 
 ## Phase 7: Polish & Advanced Features
