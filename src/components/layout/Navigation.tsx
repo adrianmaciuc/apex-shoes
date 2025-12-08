@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useState } from 'react';
-import { useCart } from '../../context/CartContext';
+import { Link } from "react-router-dom";
+import { ShoppingCart, Menu, X } from "lucide-react";
+import { useState } from "react";
+import { useCart } from "../../context/CartContext";
 
 const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -9,33 +9,41 @@ const Navigation = () => {
   const cartItemCount = getCartItemCount();
 
   const categories = [
-    { name: 'Sneakers', path: '/category/sneakers' },
-    { name: 'Running', path: '/category/running' },
-    { name: 'Casual', path: '/category/casual' },
-    { name: 'Formal', path: '/category/formal' },
-    { name: 'Boots', path: '/category/boots' },
+    { name: "Sneakers", path: "/category/sneakers" },
+    { name: "Running", path: "/category/running" },
+    { name: "Casual", path: "/category/casual" },
+    { name: "Formal", path: "/category/formal" },
+    { name: "Boots", path: "/category/boots" },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <nav
+      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200"
+      data-testid="navigation"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-2xl font-display font-bold tracking-tight"
-            style={{ color: 'var(--color-primary)' }}
+            style={{ color: "var(--color-primary)" }}
+            data-testid="nav-logo"
           >
             Sole Street
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div
+            className="hidden md:flex items-center space-x-8"
+            data-testid="nav-desktop-menu"
+          >
             {categories.map((category) => (
               <Link
                 key={category.path}
                 to={category.path}
                 className="text-gray-700 hover:text-gray-900 transition-colors font-medium"
+                data-testid={`nav-category-${category.name.toLowerCase()}`}
               >
                 {category.name}
               </Link>
@@ -43,16 +51,21 @@ const Navigation = () => {
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
+          <div
+            className="flex items-center space-x-4"
+            data-testid="nav-actions"
+          >
             <Link
               to="/about"
               className="hidden md:block text-gray-700 hover:text-gray-900 transition-colors"
+              data-testid="nav-about-link"
             >
               About
             </Link>
             <Link
               to="/contact"
               className="hidden md:block text-gray-700 hover:text-gray-900 transition-colors"
+              data-testid="nav-contact-link"
             >
               Contact
             </Link>
@@ -60,10 +73,14 @@ const Navigation = () => {
               to="/cart"
               className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
               aria-label="Shopping cart"
+              data-testid="nav-cart-link"
             >
               <ShoppingCart className="w-5 h-5" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                <span
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+                  data-testid="nav-cart-count"
+                >
                   {cartItemCount}
                 </span>
               )}
@@ -74,6 +91,7 @@ const Navigation = () => {
               className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
+              data-testid="nav-mobile-menu-button"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -86,13 +104,17 @@ const Navigation = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-2 border-t border-gray-200">
+          <div
+            className="md:hidden py-4 space-y-2 border-t border-gray-200"
+            data-testid="nav-mobile-menu"
+          >
             {categories.map((category) => (
               <Link
                 key={category.path}
                 to={category.path}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
+                data-testid={`nav-mobile-category-${category.name.toLowerCase()}`}
               >
                 {category.name}
               </Link>
@@ -102,6 +124,7 @@ const Navigation = () => {
                 to="/about"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
+                data-testid="nav-mobile-about-link"
               >
                 About
               </Link>
@@ -109,6 +132,7 @@ const Navigation = () => {
                 to="/contact"
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
+                data-testid="nav-mobile-contact-link"
               >
                 Contact
               </Link>
