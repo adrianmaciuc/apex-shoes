@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import type { Shoe } from "../../types";
 import { motion } from "framer-motion";
 import LazyImage from "../ui/LazyImage";
+import { useWishlist } from "../../context/WishlistContext";
 
 interface ProductCardProps {
   shoe: Shoe;
@@ -17,6 +18,8 @@ const ProductCard = ({
   variant = "default",
   showBadge = null,
 }: ProductCardProps) => {
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const inWishlist = isInWishlist(shoe.id);
   const getBadgeContent = () => {
     if (showBadge === "featured") {
       return (
@@ -48,7 +51,7 @@ const ProductCard = ({
       className="card overflow-hidden"
       data-testid={`product-card-default-${shoe.id}`}
     >
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden group">
         <LazyImage
           src={shoe.images[0]}
           alt={shoe.name}
@@ -57,6 +60,30 @@ const ProductCard = ({
           data-testid={`product-image-${shoe.id}`}
         />
         {getBadgeContent()}
+        {/* Wishlist Button */}
+        <motion.button
+          onClick={(e) => {
+            e.preventDefault();
+            if (inWishlist) {
+              removeFromWishlist(shoe.id);
+            } else {
+              addToWishlist(shoe);
+            }
+          }}
+          className="absolute top-4 right-4 p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          data-testid={`product-wishlist-button-${shoe.id}`}
+        >
+          <Heart
+            className="w-5 h-5 transition-colors"
+            style={{
+              color: inWishlist ? "#ef4444" : "#9ca3af",
+              fill: inWishlist ? "#ef4444" : "none",
+            }}
+            data-testid={`product-wishlist-icon-${shoe.id}`}
+          />
+        </motion.button>
       </div>
       <div className="p-6">
         <p

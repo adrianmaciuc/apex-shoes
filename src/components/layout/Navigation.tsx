@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, Heart } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 
 const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { getCartItemCount } = useCart();
+  const { getWishlistCount } = useWishlist();
   const cartItemCount = getCartItemCount();
+  const wishlistCount = getWishlistCount();
 
   const categories = [
     { name: "Sneakers", path: "/category/sneakers" },
@@ -68,6 +71,22 @@ const Navigation = () => {
               data-testid="nav-contact-link"
             >
               Contact
+            </Link>
+            <Link
+              to="/wishlist"
+              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Wishlist"
+              data-testid="nav-wishlist-link"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-semibold"
+                  data-testid="nav-wishlist-count"
+                >
+                  {wishlistCount}
+                </span>
+              )}
             </Link>
             <Link
               to="/cart"

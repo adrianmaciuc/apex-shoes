@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
 import Navigation from "./components/layout/Navigation";
 import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
 import ProductCardSkeleton from "./components/product/ProductCardSkeleton";
 import PageTransition from "./components/ui/PageTransition";
 
@@ -11,6 +12,7 @@ const HomePage = lazy(() => import("./pages/HomePage"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const ShoePage = lazy(() => import("./pages/ShoePage"));
 const CartPage = lazy(() => import("./pages/CartPage"));
+const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 
@@ -28,36 +30,39 @@ const PageLoader = () => (
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <div
-          className="min-h-screen flex flex-col"
-          style={{ backgroundColor: "var(--color-secondary)" }}
-        >
-          <Navigation />
-          <main className="flex-1">
-            <AnimatePresence mode="wait">
-              <Suspense fallback={<PageLoader />}>
-                <PageTransition>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route
-                      path="/category/:categoryName"
-                      element={<CategoryPage />}
-                    />
-                    <Route path="/shoe/:id" element={<ShoePage />} />
-                    <Route path="/cart" element={<CartPage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                  </Routes>
-                </PageTransition>
-              </Suspense>
-            </AnimatePresence>
-          </main>
-          <footer className="py-8 px-4 text-center text-gray-600 text-sm border-t border-gray-200">
-            <p>© 2025 Apex Shoes. All rights reserved.</p>
-          </footer>
-        </div>
-      </Router>
+      <WishlistProvider>
+        <Router>
+          <div
+            className="min-h-screen flex flex-col"
+            style={{ backgroundColor: "var(--color-secondary)" }}
+          >
+            <Navigation />
+            <main className="flex-1">
+              <AnimatePresence mode="wait">
+                <Suspense fallback={<PageLoader />}>
+                  <PageTransition>
+                    <Routes>
+                      <Route path="/" element={<HomePage />} />
+                      <Route
+                        path="/category/:categoryName"
+                        element={<CategoryPage />}
+                      />
+                      <Route path="/shoe/:id" element={<ShoePage />} />
+                      <Route path="/cart" element={<CartPage />} />
+                      <Route path="/wishlist" element={<WishlistPage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
+                    </Routes>
+                  </PageTransition>
+                </Suspense>
+              </AnimatePresence>
+            </main>
+            <footer className="py-8 px-4 text-center text-gray-600 text-sm border-t border-gray-200">
+              <p>© 2025 Apex Shoes. All rights reserved.</p>
+            </footer>
+          </div>
+        </Router>
+      </WishlistProvider>
     </CartProvider>
   );
 }
