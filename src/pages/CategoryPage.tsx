@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
-import { Filter, SlidersHorizontal, X } from "lucide-react";
+import { Filter, SlidersHorizontal, Search, Package } from "lucide-react";
 import { shoes, categories } from "../data/shoes";
 import type { ShoeCategory } from "../types";
 import ProductCard from "../components/product/ProductCard";
 import Breadcrumb from "../components/layout/Breadcrumb";
+import EmptyState from "../components/ui/EmptyState";
 
 type SortOption =
   | "name-asc"
@@ -404,7 +405,17 @@ const CategoryPage = () => {
 
           {/* Products Grid */}
           <div className="flex-1" data-testid="category-products-container">
-            {filteredShoes.length > 0 ? (
+            {categoryShoes.length === 0 ? (
+              // Category is completely empty
+              <EmptyState
+                icon={Package}
+                title="Coming Soon"
+                description={`We're working on bringing you amazing ${categoryName} products. Check back soon!`}
+                actionLabel="Browse Other Categories"
+                onAction={() => window.history.back()}
+                showAnimation={true}
+              />
+            ) : filteredShoes.length > 0 ? (
               <div
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                 data-testid="category-products-grid"
@@ -420,39 +431,15 @@ const CategoryPage = () => {
                 ))}
               </div>
             ) : (
-              <div
-                className="text-center py-16"
-                data-testid="category-no-products"
-              >
-                <div
-                  className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4"
-                  data-testid="category-no-products-icon-wrapper"
-                >
-                  <X
-                    className="w-8 h-8 text-gray-400"
-                    data-testid="category-no-products-icon"
-                  />
-                </div>
-                <h3
-                  className="text-xl font-display font-semibold mb-2"
-                  data-testid="category-no-products-heading"
-                >
-                  No products found
-                </h3>
-                <p
-                  className="text-gray-600 mb-6"
-                  data-testid="category-no-products-message"
-                >
-                  Try adjusting your filters to see more results
-                </p>
-                <button
-                  onClick={clearFilters}
-                  className="btn-accent"
-                  data-testid="category-clear-filters-retry-button"
-                >
-                  Clear Filters
-                </button>
-              </div>
+              // Filters resulted in no products
+              <EmptyState
+                icon={Search}
+                title="No products found"
+                description="Try adjusting your filters to see more results"
+                actionLabel="Clear Filters"
+                onAction={clearFilters}
+                showAnimation={true}
+              />
             )}
           </div>
         </div>

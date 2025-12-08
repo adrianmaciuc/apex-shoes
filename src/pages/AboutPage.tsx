@@ -199,7 +199,6 @@ const AboutPage = () => {
                 onMouseLeave={() => setHoveredValue(null)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                data-testid={`about-value-card-${index}`}
               >
                 <motion.div
                   className="w-14 h-14 rounded-full flex items-center justify-center mb-6"
@@ -211,22 +210,13 @@ const AboutPage = () => {
                     hoveredValue === index ? { rotate: 360, scale: 1.1 } : {}
                   }
                   transition={{ duration: 0.6 }}
-                  data-testid={`about-value-icon-${index}`}
                 >
                   <value.icon className="w-7 h-7" />
                 </motion.div>
-                <h3
-                  className="text-xl font-display font-bold mb-3"
-                  data-testid={`about-value-title-${index}`}
-                >
+                <h3 className="text-xl font-display font-bold mb-3">
                   {value.title}
                 </h3>
-                <p
-                  className="text-gray-600"
-                  data-testid={`about-value-description-${index}`}
-                >
-                  {value.description}
-                </p>
+                <p className="text-gray-600">{value.description}</p>
               </motion.div>
             ))}
           </div>
