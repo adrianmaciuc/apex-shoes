@@ -113,7 +113,7 @@ const CheckoutPage = () => {
   };
 
   const proceedToSuccess = () => {
-    navigate("/order-success", {
+    navigate("/order-processing", {
       state: {
         ...orderData,
         paymentMethod:
