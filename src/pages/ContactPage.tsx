@@ -8,6 +8,14 @@ const ContactPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCallUsText(true);
+    }, 7000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,10 +30,55 @@ const ContactPage = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [formErrors, setFormErrors] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [showErrors, setShowErrors] = useState(false);
+  const [showCallUsText, setShowCallUsText] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
+
+    // Validation
+    const errors = {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    };
+
+    if (formData.name.trim().length < 2) {
+      errors.name = "Name is required (minimum 2 characters)";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (formData.subject.trim().length < 3) {
+      errors.subject = "Subject is required (minimum 3 characters)";
+    }
+
+    if (formData.message.trim().length < 10) {
+      errors.message = "Message is required (minimum 10 characters)";
+    }
+
+    // Check if there are any errors
+    const hasErrors = Object.values(errors).some((error) => error !== "");
+
+    if (hasErrors) {
+      setFormErrors(errors);
+      setShowErrors(true);
+      return;
+    }
+
+    // If validation passes
+    setShowErrors(false);
+    setFormErrors({ name: "", email: "", subject: "", message: "" });
     setSubmitStatus("success");
     setTimeout(() => {
       setFormData({ name: "", email: "", subject: "", message: "" });
@@ -53,10 +106,16 @@ const ContactPage = () => {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Clear error for this field when user starts typing
+    if (showErrors && formErrors[name as keyof typeof formErrors]) {
+      setFormErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   const contactInfo = [
@@ -182,18 +241,45 @@ const ContactPage = () => {
               >
                 {info.title}
               </h3>
-              <p
-                className="text-gray-700 font-medium"
-                data-testid={`contact-info-content-${index}`}
-              >
-                {info.content}
-              </p>
-              <p
-                className="text-gray-500 text-sm mt-1"
-                data-testid={`contact-info-subcontent-${index}`}
-              >
-                {info.subcontent}
-              </p>
+              {index === 1 ? (
+                showCallUsText ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <p
+                      className="text-gray-700 font-medium"
+                      data-testid={`contact-info-content-${index}`}
+                    >
+                      {info.content}
+                    </p>
+                    <p
+                      className="text-gray-500 text-sm mt-1"
+                      data-testid={`contact-info-subcontent-${index}`}
+                    >
+                      {info.subcontent}
+                    </p>
+                  </motion.div>
+                ) : (
+                  <p className="text-gray-400 italic">Loading...</p>
+                )
+              ) : (
+                <>
+                  <p
+                    className="text-gray-700 font-medium"
+                    data-testid={`contact-info-content-${index}`}
+                  >
+                    {info.content}
+                  </p>
+                  <p
+                    className="text-gray-500 text-sm mt-1"
+                    data-testid={`contact-info-subcontent-${index}`}
+                  >
+                    {info.subcontent}
+                  </p>
+                </>
+              )}
               {index === 1 && copiedPhone && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -267,11 +353,17 @@ const ContactPage = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all ${
+                    showErrors && formErrors.name
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
                   placeholder="John Doe"
                   data-testid="contact-form-input-name"
                 />
+                {showErrors && formErrors.name && (
+                  <p className="text-red-600 text-sm mt-1">{formErrors.name}</p>
+                )}
               </div>
 
               <div data-testid="contact-form-field-email">
@@ -288,11 +380,19 @@ const ContactPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all ${
+                    showErrors && formErrors.email
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
                   placeholder="john@example.com"
                   data-testid="contact-form-input-email"
                 />
+                {showErrors && formErrors.email && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {formErrors.email}
+                  </p>
+                )}
               </div>
 
               <div data-testid="contact-form-field-subject">
@@ -309,11 +409,19 @@ const ContactPage = () => {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all ${
+                    showErrors && formErrors.subject
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
                   placeholder="Product inquiry"
                   data-testid="contact-form-input-subject"
                 />
+                {showErrors && formErrors.subject && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {formErrors.subject}
+                  </p>
+                )}
               </div>
 
               <div data-testid="contact-form-field-message">
@@ -329,12 +437,20 @@ const ContactPage = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  required
                   rows={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all resize-none"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none transition-all resize-none ${
+                    showErrors && formErrors.message
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  }`}
                   placeholder="Tell us how we can help you..."
                   data-testid="contact-form-textarea-message"
                 />
+                {showErrors && formErrors.message && (
+                  <p className="text-red-600 text-sm mt-1">
+                    {formErrors.message}
+                  </p>
+                )}
               </div>
 
               <motion.button

@@ -471,12 +471,23 @@ const CartPage = () => {
                 </div>
               </div>
 
-              <button
-                className="w-full btn-accent text-lg"
+              <Link
+                to="/checkout"
+                state={{
+                  cartItems,
+                  subtotal,
+                  voucherDiscount,
+                  appliedVoucher,
+                  shipping,
+                  tax,
+                  total,
+                  country,
+                }}
+                className="w-full btn-accent text-lg block text-center"
                 data-testid="cart-checkout-button"
               >
                 Proceed to Checkout
-              </button>
+              </Link>
 
               <Link
                 to="/"

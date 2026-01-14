@@ -1,4 +1,9 @@
-export type ShoeCategory = 'sneakers' | 'running' | 'casual' | 'formal' | 'boots';
+export type ShoeCategory =
+  | "sneakers"
+  | "running"
+  | "casual"
+  | "formal"
+  | "boots";
 
 export interface Shoe {
   id: string;
@@ -27,4 +32,29 @@ export interface CategoryInfo {
   name: string;
   description: string;
   image: string;
+}
+
+export interface OrderSummary {
+  cartItems: CartItem[];
+  subtotal: number;
+  voucherDiscount: number;
+  appliedVoucher: string | null;
+  shipping: number;
+  tax: number;
+  total: number;
+  country: string;
+}
+
+export interface PaymentFormData {
+  paymentMethod: "card" | "cash";
+  cardNumber: string;
+  cardholderName: string;
+  expiryDate: string;
+  cvv: string;
+}
+
+export interface CompletedOrder extends OrderSummary {
+  paymentMethod: string;
+  orderDate: Date;
+  orderId: string;
 }
