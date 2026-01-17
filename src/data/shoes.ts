@@ -3166,29 +3166,7 @@ export const shoes: Shoe[] = [
     inStock: true,
   },
   {
-    id: "for-003",
-    name: "Monk Strap Premium",
-    brand: "LuxeFootwear",
-    price: 199.99,
-    category: "formal",
-    images: [
-      "https://images.unsplash.com/photo-1582897085656-c5ab6d031d8f?w=800",
-    ],
-    sizes: [8, 9, 10, 11, 12],
-    colors: ["Black", "Brown", "Tan"],
-    description:
-      "Distinguished style statement. Double monk strap for the discerning gentleman.",
-    features: [
-      "Italian leather",
-      "Double buckle",
-      "Leather lining",
-      "Hand-finished",
-    ],
-    featured: false,
-    inStock: true,
-  },
-  {
-    id: "for-003",
+    id: "for-054",
     name: "Monk Strap Premium",
     brand: "LuxeFootwear",
     price: 199.99,

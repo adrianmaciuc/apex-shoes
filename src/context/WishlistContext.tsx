@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Shoe } from "../types";
+import { useAuth } from "./AuthContext";
 
 interface WishlistContextType {
   wishlistItems: Shoe[];
@@ -21,12 +22,13 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 );
 
 const WISHLIST_STORAGE_KEY = "apex_shoes_wishlist";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337/api";
 
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
+  const { isAuthenticated, token } = useAuth();
   const [wishlistItems, setWishlistItems] = useState<Shoe[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load from localStorage on mount
   useEffect(() => {
     const savedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
     if (savedWishlist) {
@@ -40,27 +42,124 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     setIsLoaded(true);
   }, []);
 
-  // Save to localStorage whenever wishlist changes
+  useEffect(() => {
+    if (isAuthenticated && token && isLoaded) {
+      const syncWishlist = async () => {
+        try {
+          const response = await fetch(`${API_URL}/wishlists`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const items = data.data || [];
+            const backendItems = items.map(
+              (item: {
+                shoe: string;
+                shoeName: string;
+                shoeImage: string;
+                shoePrice: number;
+              }) =>
+                ({
+                  id: item.shoe,
+                  name: item.shoeName,
+                  price: item.shoePrice,
+                  images: [item.shoeImage],
+                  brand: "",
+                  category: "sneakers" as const,
+                  sizes: [],
+                  colors: [],
+                  description: "",
+                  features: [],
+                  featured: false,
+                  inStock: true,
+                }) as Shoe,
+            );
+            setWishlistItems(backendItems);
+            localStorage.setItem(
+              WISHLIST_STORAGE_KEY,
+              JSON.stringify(backendItems),
+            );
+          }
+        } catch (error) {
+          console.error("Failed to sync wishlist:", error);
+        }
+      };
+
+      syncWishlist();
+    }
+  }, [isAuthenticated, token, isLoaded]);
+
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(wishlistItems));
     }
   }, [wishlistItems, isLoaded]);
 
-  const addToWishlist = (shoe: Shoe) => {
+  const addToWishlist = async (shoe: Shoe) => {
     setWishlistItems((prevItems) => {
-      // Check if shoe already in wishlist
       if (prevItems.some((item) => item.id === shoe.id)) {
         return prevItems;
       }
       return [...prevItems, shoe];
     });
+
+    if (isAuthenticated && token) {
+      try {
+        await fetch(`${API_URL}/wishlists`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            data: {
+              shoe: shoe.id,
+              shoeName: shoe.name,
+              shoeImage: shoe.images[0],
+              shoePrice: shoe.price,
+            },
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to add to backend wishlist:", error);
+      }
+    }
   };
 
-  const removeFromWishlist = (shoeId: string) => {
+  const removeFromWishlist = async (shoeId: string) => {
     setWishlistItems((prevItems) =>
       prevItems.filter((item) => item.id !== shoeId),
     );
+
+    if (isAuthenticated && token) {
+      try {
+        const response = await fetch(`${API_URL}/wishlists`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const wishlistItem = data.data.find(
+            (item: { shoe: string }) => item.shoe === shoeId,
+          );
+          if (wishlistItem) {
+            await fetch(`${API_URL}/wishlists/${wishlistItem.id}`, {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to remove from backend wishlist:", error);
+      }
+    }
   };
 
   const isInWishlist = (shoeId: string) => {
@@ -91,6 +190,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useWishlist = () => {
   const context = useContext(WishlistContext);
   if (context === undefined) {

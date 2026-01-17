@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import Navigation from "./components/layout/Navigation";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
+import { AuthProvider } from "./context/AuthContext";
 import ProductCardSkeleton from "./components/product/ProductCardSkeleton";
 import PageTransition from "./components/ui/PageTransition";
 
@@ -18,6 +19,10 @@ const OrderSuccessPage = lazy(() => import("./pages/OrderSuccessPage"));
 const WishlistPage = lazy(() => import("./pages/WishlistPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const OrdersPage = lazy(() => import("./pages/OrdersPage"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -32,50 +37,56 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <CartProvider>
-      <WishlistProvider>
-        <Router>
-          <div
-            className="min-h-screen flex flex-col"
-            style={{ backgroundColor: "var(--color-secondary)" }}
-          >
-            <Navigation />
-            <main className="flex-1">
-              <AnimatePresence mode="wait">
-                <Suspense fallback={<PageLoader />}>
-                  <PageTransition>
-                    <Routes>
-                      <Route path="/" element={<HomePage />} />
-                      <Route
-                        path="/category/:categoryName"
-                        element={<CategoryPage />}
-                      />
-                      <Route path="/shoe/:id" element={<ShoePage />} />
-                      <Route path="/cart" element={<CartPage />} />
-                      <Route path="/checkout" element={<CheckoutPage />} />
-                      <Route
-                        path="/order-processing"
-                        element={<OrderProcessingPage />}
-                      />
-                      <Route
-                        path="/order-success"
-                        element={<OrderSuccessPage />}
-                      />
-                      <Route path="/wishlist" element={<WishlistPage />} />
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/contact" element={<ContactPage />} />
-                    </Routes>
-                  </PageTransition>
-                </Suspense>
-              </AnimatePresence>
-            </main>
-            <footer className="py-8 px-4 text-center text-gray-600 text-sm border-t border-gray-200">
-              <p>© 2025 Apex Shoes. All rights reserved.</p>
-            </footer>
-          </div>
-        </Router>
-      </WishlistProvider>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <Router>
+            <div
+              className="min-h-screen flex flex-col"
+              style={{ backgroundColor: "var(--color-secondary)" }}
+            >
+              <Navigation />
+              <main className="flex-1">
+                <AnimatePresence mode="wait">
+                  <Suspense fallback={<PageLoader />}>
+                    <PageTransition>
+                      <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route
+                          path="/category/:categoryName"
+                          element={<CategoryPage />}
+                        />
+                        <Route path="/shoe/:id" element={<ShoePage />} />
+                        <Route path="/cart" element={<CartPage />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route
+                          path="/order-processing"
+                          element={<OrderProcessingPage />}
+                        />
+                        <Route
+                          path="/order-success"
+                          element={<OrderSuccessPage />}
+                        />
+                        <Route path="/wishlist" element={<WishlistPage />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/contact" element={<ContactPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                        <Route path="/orders" element={<OrdersPage />} />
+                      </Routes>
+                    </PageTransition>
+                  </Suspense>
+                </AnimatePresence>
+              </main>
+              <footer className="py-8 px-4 text-center text-gray-600 text-sm border-t border-gray-200">
+                <p>© 2025 Apex Shoes. All rights reserved.</p>
+              </footer>
+            </div>
+          </Router>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
