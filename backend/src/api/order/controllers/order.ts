@@ -31,7 +31,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       return ctx.notFound("Order not found");
     }
 
-    return order;
+    return { data: order };
   },
 
   async create(ctx) {

@@ -273,6 +273,27 @@ If browser validation is required, use Playwright MCP. This is the preferred way
 
 Use Playwright MCP for any task that requires verifying how the application actually behaves in a browser, as opposed to Jest unit tests which use jsdom.
 
+### Chrome DevTools MCP
+
+If browser debugging and inspection is required, use Chrome DevTools MCP. This provides direct access to browser DevTools protocols for:
+
+- **DOM Inspection & Interaction**: Take snapshots of the page, click elements, fill forms, hover, drag, and press keys
+- **Console Access**: List and retrieve console messages, debug logs, errors, and warnings
+- **Network Monitoring**: Monitor network requests, view headers, response bodies, and timing
+- **Performance Profiling**: Start/stop performance traces, analyze Core Web Vitals (LCP, FID, CLS)
+- **Page Navigation**: Navigate to URLs, go back/forward, reload with cache control
+- **Emulation**: Simulate different network conditions (3G/4G, offline), geolocation, CPU throttling
+- **Screenshots**: Take viewport or full-page screenshots for visual verification
+
+Common debugging scenarios:
+
+- Debug console errors in a real browser
+- Inspect React component structure via the accessibility tree
+- Verify form behavior and validation
+- Profile rendering performance
+- Check network requests for missing resources
+- Take visual snapshots to verify UI changes
+
 ## Environment & Dependencies
 
 **Node.js**: 18.x or higher required

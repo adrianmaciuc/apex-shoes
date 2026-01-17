@@ -23,6 +23,7 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const OrdersPage = lazy(() => import("./pages/OrdersPage"));
+const OrderDetailPage = lazy(() => import("./pages/OrderDetailPage"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -74,6 +75,10 @@ function App() {
                         <Route path="/register" element={<RegisterPage />} />
                         <Route path="/profile" element={<ProfilePage />} />
                         <Route path="/orders" element={<OrdersPage />} />
+                        <Route
+                          path="/orders/:id"
+                          element={<OrderDetailPage />}
+                        />
                       </Routes>
                     </PageTransition>
                   </Suspense>
