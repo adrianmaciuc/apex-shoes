@@ -248,6 +248,31 @@ const ComponentName = lazy(() => import("./pages/ComponentName"));
 9. **Test coverage threshold is 70%** - New code should maintain this
 10. **Tailwind CSS v4** - Using the Vite plugin, not v3 syntax
 
+## MCP Tools & External Resources
+
+### Context7 MCP
+
+If Context7 MCP is available, always consult the official documentation related to the task before performing any action. Use Context7 to:
+
+- Look up API references for libraries and frameworks used in this project
+- Verify best practices for React, TypeScript, Vite, Tailwind CSS, and other dependencies
+- Check for updated patterns or deprecated APIs
+- Research how to implement new features correctly
+
+Always prefer official documentation over assumptions or outdated knowledge.
+
+### Playwright MCP
+
+If browser validation is required, use Playwright MCP. This is the preferred way to:
+
+- Verify UI changes render correctly in a real browser environment
+- Test user interactions (clicks, form submissions, navigation)
+- Check responsive design across different screen sizes
+- Validate that pages load without JavaScript errors
+- Take screenshots or snapshots of the application state
+
+Use Playwright MCP for any task that requires verifying how the application actually behaves in a browser, as opposed to Jest unit tests which use jsdom.
+
 ## Environment & Dependencies
 
 **Node.js**: 18.x or higher required
