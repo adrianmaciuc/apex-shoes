@@ -7,6 +7,7 @@ import {
 } from "react";
 import type { Shoe } from "../types";
 import { useAuth } from "./AuthContext";
+import { getApiUrl } from "../utils/api";
 
 interface WishlistContextType {
   wishlistItems: Shoe[];
@@ -22,12 +23,12 @@ const WishlistContext = createContext<WishlistContextType | undefined>(
 );
 
 const WISHLIST_STORAGE_KEY = "apex_shoes_wishlist";
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337/api";
 
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const { isAuthenticated, token } = useAuth();
   const [wishlistItems, setWishlistItems] = useState<Shoe[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [apiUrl] = useState(() => getApiUrl());
 
   useEffect(() => {
     const savedWishlist = localStorage.getItem(WISHLIST_STORAGE_KEY);
@@ -46,7 +47,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
     if (isAuthenticated && token && isLoaded) {
       const syncWishlist = async () => {
         try {
-          const response = await fetch(`${API_URL}/wishlists`, {
+          const response = await fetch(`${apiUrl}/wishlists`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -108,7 +109,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
 
     if (isAuthenticated && token) {
       try {
-        await fetch(`${API_URL}/wishlists`, {
+        await fetch(`${apiUrl}/wishlists`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -136,7 +137,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
 
     if (isAuthenticated && token) {
       try {
-        const response = await fetch(`${API_URL}/wishlists`, {
+        const response = await fetch(`${apiUrl}/wishlists`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -148,7 +149,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
             (item: { shoe: string }) => item.shoe === shoeId,
           );
           if (wishlistItem) {
-            await fetch(`${API_URL}/wishlists/${wishlistItem.id}`, {
+            await fetch(`${apiUrl}/wishlists/${wishlistItem.id}`, {
               method: "DELETE",
               headers: {
                 Authorization: `Bearer ${token}`,
