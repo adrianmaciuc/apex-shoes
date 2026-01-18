@@ -1,55 +1,27 @@
 # AGENTS.md - Apex Shoes E-Commerce
 
-This file provides essential guidelines for agentic coding tools working in this repository. Contains project overview, tech stack, architecture, build commands, code style conventions, testing patterns, and operational procedures.
+Contains project overview, tech stack, architecture, build commands, code style conventions, testing patterns, and operational procedures.
 
 ## Project Overview
 
-**Apex Shoes** (sole-street) - A demo e-commerce shoe shop built with React 19, TypeScript, and Vite. This is a learning project for experimenting with modern web development practices.
+**Apex Shoes** (sole-street) - A demo e-commerce shoe shop built with React 19, TypeScript, Vite and Strapi.
 
-**Purpose**: Demo/educational project with mock data, no backend integration.
+**Purpose**: Demo/educational project with mock data, but with strapi for users.
 
 ## Technology Stack
 
-- **React 19.2.0** - UI library
-- **TypeScript 5.9.3** - Static typing
-- **Vite 7.2.4** - Build tool & dev server
-- **Tailwind CSS 4.1.17** - Styling (via @tailwindcss/vite plugin)
-- **React Router DOM 7.10.1** - Client-side routing
-- **Framer Motion 12.23.25** - Animations
-- **Lucide React 0.556.0** - Icons
-- **Jest 30.2.0** - Testing framework
-- **@testing-library/react 16.3.0** - React testing utilities
+Read package.json for tech stack
+Repo may have multiple package.json - read them all to fully understand
 
 ## Architecture
 
 ### Directory Structure
 
 ```
-src/
-├── components/          # Reusable React components
-│   ├── layout/         # Layout components (Navigation, Breadcrumb)
-│   ├── product/        # Product-specific components (ProductCard, ProductCardSkeleton)
-│   └── ui/             # UI components (Skeleton, ImageZoom, EmptyState, LazyImage, PageTransition, ParticleBurst)
-├── context/            # React Context providers (CartContext, WishlistContext)
-├── data/               # Mock data (shoes.ts - 18 products across 5 categories)
-├── pages/              # Page components (all lazy-loaded)
-│   ├── HomePage.tsx
-│   ├── CategoryPage.tsx
-│   ├── ShoePage.tsx
-│   ├── CartPage.tsx
-│   ├── CheckoutPage.tsx
-│   ├── OrderProcessingPage.tsx
-│   ├── OrderSuccessPage.tsx
-│   ├── WishlistPage.tsx
-│   ├── AboutPage.tsx
-│   └── ContactPage.tsx
-├── types/              # TypeScript type definitions (index.ts)
-├── utils/              # Utility functions (validation.ts, test-helpers.ts)
-├── __tests__/          # Test files (context/, data/, utils/)
-├── App.tsx             # Main app with routing and providers
-├── index.css           # Global styles and Tailwind directives
-├── main.tsx            # Entry point
-└── jest.setup.ts       # Jest configuration with mocks
+Front end is at root level
+Back end is in separate folder called backend
+Testing framework for end to end should have its own tests folder at root level
+Unit tests with hest live in src/__tests__
 ```
 
 ### Key Architecture Patterns
@@ -80,22 +52,6 @@ src/
 ## Type System
 
 **Key Types** (src/types/index.ts):
-
-- `Shoe` - Product data structure
-- `ShoeCategory` - Category enum: "sneakers" | "running" | "casual" | "formal" | "boots"
-- `CartItem` - Cart items with shoe, size, color, quantity
-- `CategoryInfo` - Category metadata
-- `OrderSummary` - Order calculation data
-- `PaymentFormData` - Checkout form data
-- `CompletedOrder` - Order confirmation data
-
-**TypeScript Configuration**
-
-- Strict mode enabled
-- `noUnusedLocals: true`, `noUnusedParameters: true`
-- `jsx: "react-jsx"`
-- Target: ES2022, Module: ESNext
-- Module resolution: bundler
 
 ## Build & Development Commands
 
@@ -173,29 +129,6 @@ npm run test:coverage  # Run tests with coverage report
 
 ## Key Features & Functionality
 
-### Shopping Cart
-
-- Add items with size/color/quantity selection
-- Update quantities, remove items
-- Cart total calculation
-- Cart item count
-- Toast notifications
-- Free shipping over $100
-
-### Wishlist
-
-- Add/remove items to wishlist
-- Wishlist item count
-
-### Product Features
-
-- 18 mock products across 5 categories
-- Filtering by size, color, price range
-- Sorting options
-- Image gallery with zoom
-- Size/color selection
-- Product specifications
-
 ### Responsive Design
 
 - Mobile-first approach
@@ -244,9 +177,10 @@ const ComponentName = lazy(() => import("./pages/ComponentName"));
 5. **Lazy load pages** - All page components are lazy-loaded
 6. **Use Context API** for global state - no Redux, Zustand, etc.
 7. **Mock data** - All product data is in src/data/shoes.ts
-8. **No backend** - This is a frontend demo project
+8. **Backend** - used with strapi
 9. **Test coverage threshold is 70%** - New code should maintain this
 10. **Tailwind CSS v4** - Using the Vite plugin, not v3 syntax
+11. Run tests at the end of each change to ensure everything is OK
 
 ## MCP Tools & External Resources
 
@@ -316,22 +250,3 @@ Common debugging scenarios:
 - `eslint.config.js` - ESLint flat config
 - `.eslintrc.cjs` - Legacy ESLint config (may be phased out)
 - `.prettierignore` - Files to ignore during formatting
-
-## Demo Project Scope
-
-**Included**:
-
-- Fully functional shopping cart and wishlist
-- Product browsing with filtering/sorting
-- Responsive design
-- Modern UI with animations
-- TypeScript type safety
-- Mock data (18 products)
-
-**NOT Included** (by design):
-
-- Backend/API integration
-- Payment processing
-- User authentication
-- Database persistence
-- Real order management
