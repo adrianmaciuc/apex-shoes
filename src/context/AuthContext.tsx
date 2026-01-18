@@ -47,7 +47,7 @@ const ERROR_MESSAGES: Record<AuthError, string> = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AUTH_TOKEN_KEY = "apex_shoes_auth_token";
-const API_URL = "http://localhost:1337/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:1337/api";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<ExtendedUser | null>(null);

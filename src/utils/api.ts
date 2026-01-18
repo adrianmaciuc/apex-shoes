@@ -1,5 +1,5 @@
 const DEFAULT_API_URL = "http://localhost:1337/api";
 
 export const getApiUrl = (): string => {
-  return DEFAULT_API_URL;
+  return import.meta.env.VITE_API_URL || DEFAULT_API_URL;
 };
