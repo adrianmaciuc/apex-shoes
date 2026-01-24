@@ -12,6 +12,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
     "type-check": "tsc --noEmit",
+    "check": "npm run type-check && npm run lint",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
