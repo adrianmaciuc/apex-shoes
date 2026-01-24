@@ -30,6 +30,7 @@ const RegisterPage = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      secretKey: "",
     },
     validate: (values) => {
       const errors: Record<string, string> = {};
@@ -64,6 +65,10 @@ const RegisterPage = () => {
         errors.confirmPassword = "Passwords do not match";
       }
 
+      if (!values.secretKey) {
+        errors.secretKey = "Secret key is required";
+      }
+
       return errors;
     },
     onSubmit: async (values) => {
@@ -71,7 +76,7 @@ const RegisterPage = () => {
       clearError();
 
       try {
-        await register(values.username, values.email, values.password);
+        await register(values.username, values.email, values.password, values.secretKey);
         navigate(redirect, { replace: true });
       } catch (err) {
         const errorMessage =
@@ -244,6 +249,35 @@ const RegisterPage = () => {
                       {formik.errors.confirmPassword}
                     </p>
                   )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="secretKey"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Secret Key
+                </label>
+                <input
+                  id="secretKey"
+                  name="secretKey"
+                  type="password"
+                  autoComplete="off"
+                  className={`w-full px-4 py-3 rounded-lg border ${
+                    formik.touched.secretKey && formik.errors.secretKey
+                      ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+                      : "border-gray-300 focus:ring-primary focus:border-primary"
+                  } focus:outline-none focus:ring-2 transition-colors`}
+                  placeholder="Enter secret key"
+                  value={formik.values.secretKey}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.secretKey && formik.errors.secretKey && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {formik.errors.secretKey}
+                  </p>
+                )}
               </div>
 
               <button

@@ -18,6 +18,7 @@ interface AuthContextType {
     username: string,
     email: string,
     password: string,
+    secretKey: string,
   ) => Promise<void>;
   logout: () => void;
   clearError: () => void;
@@ -31,6 +32,7 @@ type AuthError =
   | "INVALID_CREDENTIALS"
   | "NETWORK_ERROR"
   | "SESSION_EXPIRED"
+  | "SECRET_KEY_INVALID"
   | "UNKNOWN";
 
 const ERROR_MESSAGES: Record<AuthError, string> = {
@@ -41,6 +43,7 @@ const ERROR_MESSAGES: Record<AuthError, string> = {
   INVALID_CREDENTIALS: "Invalid email or password. Please try again.",
   NETWORK_ERROR: "Unable to connect. Please check your internet connection.",
   SESSION_EXPIRED: "Your session has expired. Please log in again.",
+  SECRET_KEY_INVALID: "Secret key is not valid. Registration not allowed.",
   UNKNOWN: "An unexpected error occurred. Please try again.",
 };
 
@@ -58,6 +61,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const parseAuthError = (errorMessage: string): AuthError => {
     const lowerMessage = errorMessage.toLowerCase();
+    if (
+      lowerMessage.includes("secretkey") ||
+      lowerMessage.includes("secret key")
+    ) {
+      return "SECRET_KEY_INVALID";
+    }
     if (
       lowerMessage.includes("email") ||
       lowerMessage.includes("already used") ||
@@ -168,6 +177,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     username: string,
     email: string,
     password: string,
+    secretKey: string,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -178,7 +188,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, email, password, secretKey }),
       });
 
       const data = await response.json();
